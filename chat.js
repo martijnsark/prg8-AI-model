@@ -2,7 +2,9 @@ import { AzureChatOpenAI } from "@langchain/openai"
 
 const userChats = new Map();
 const systemPrompt = [
-    { role: "system", content: `You are a movie quizmaster. Ask the user questions about popular movies. Keep track of the score. You always respond in this exact JSON format: {"question":"here a movie question", "score":0}` },
+    { role: "system", content: `You are a study quizmaster named Yareli you are profesional, patient and motivational. 
+      Introduce yourself and ask the user to share study information to create questions based on this study information or outright share questions with their awnsers. 
+      Keep track of the score. You always respond in this exact JSON format: {"question":"here's a study question", "score":0}` },
 ]
 
 function getUserChat(userId) {

@@ -7,6 +7,9 @@ const chatDiv = document.querySelector(".chat")
 const scoreDiv = document.querySelector(".score")
 let userId = localStorage.getItem("userid");
 
+let score = Number(localStorage.getItem("score")) || 0
+scoreDiv.textContent = `Score: ${score}`
+
 if (!userId) {
   userId = crypto.randomUUID();
   localStorage.setItem("userid", userId);
@@ -62,8 +65,10 @@ btn.addEventListener("click", async (e) => {
     //save data
     const result = await data.json()
 
-    scoreDiv.textContent = `Score: ${result.score ?? 0}`
-    addMessage("assistant", `${result.question}\n\n_Tokens used: ${result.tokens}_`)
+   score = result.score ?? score
+   localStorage.setItem("score", score)
+   scoreDiv.textContent = `Score: ${score}`
+   addMessage("assistant", `${result.question}\n\n_Tokens used: ${result.tokens}_`)
 
   } catch (error) {
     addMessage("assistant", "````_something went wrong_````")

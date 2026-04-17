@@ -62,8 +62,6 @@ btn.addEventListener("click", async (e) => {
     //save data
     const result = await data.json()
 
-    console.log(result.tokens)
-
     scoreDiv.textContent = `Score: ${result.score ?? 0}`
     addMessage("assistant", `${result.question}\n\n_Tokens used: ${result.tokens}_`)
 

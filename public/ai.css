@@ -110,6 +110,7 @@ form {
 
 .trigger {
   padding: 12px 18px;
+  width: 120px;
   border: none;
   border-radius: 14px;
   background: #4f46e5;
@@ -133,6 +134,35 @@ form {
 }
 
 .trigger:disabled:hover {
+  background: #94a3b8;
+}
+
+#reset {
+  padding: 12px 18px;
+  width: 120px;
+  border: none;
+  border-radius: 14px;
+  background: #dc2626;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(220, 38, 38, 0.22);
+}
+
+#reset:hover {
+  background: #b91c1c;
+}
+
+#reset:disabled {
+  background: #94a3b8;
+  color: #e2e8f0;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+#reset:disabled:hover {
   background: #94a3b8;
 }
 

@@ -5,6 +5,7 @@ const btn = document.querySelector("button")
 const input = document.querySelector("#input")
 const chatDiv = document.querySelector(".chat")
 const scoreDiv = document.querySelector(".score")
+const resetBtn = document.querySelector("#reset")
 let userId = localStorage.getItem("userid");
 
 let score = Number(localStorage.getItem("score")) || 0
@@ -53,6 +54,7 @@ btn.addEventListener("click", async (e) => {
   addMessage("user", prompt)
   input.value = ""
   btn.disabled = true
+  resetBtn.disabled = true
 
   try {
     //get data
@@ -75,7 +77,24 @@ btn.addEventListener("click", async (e) => {
     console.error(error)
   } finally {
     btn.disabled = false
+    resetBtn.disabled = false
   }
+})
+
+resetBtn.addEventListener("click", async () => {
+  await fetch("/api/reset", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId })
+  })
+
+  // clear UI
+  chatDiv.innerHTML = ""
+
+  // reset score
+  score = 0
+  localStorage.setItem("score", score)
+  scoreDiv.textContent = `Score: ${score}`
 })
 
 

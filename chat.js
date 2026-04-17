@@ -40,3 +40,7 @@ export function getHistory(userId) {
     .slice(-10)
     .filter((m) => m.role !== "system")
 }
+
+export function resetUser(userId) {
+  userChats.delete(userId)
+}

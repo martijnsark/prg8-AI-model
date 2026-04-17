@@ -1,5 +1,5 @@
 import express from "express"
-import { callOpenAI, getHistory } from "./chat.js"
+import { callOpenAI, getHistory, resetUser } from "./chat.js"
 
 
 const app = express()
@@ -21,6 +21,12 @@ app.post("/api/getHistory", async(req,res) => {
     const { userId } = req.body 
     const history = getHistory(userId)
     res.json(history)
+})
+
+app.post("/api/reset", (req, res) => {
+  const { userId } = req.body
+  resetUser(userId)
+  res.json({ success: true })
 })
 
 app.listen(3000, ()=> console.log("server started"))

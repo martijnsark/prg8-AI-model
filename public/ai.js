@@ -40,6 +40,21 @@ async function loadHistory() {
   })
 }
 
+function addMessage(type, text) {
+  const message = document.createElement("div")
+  message.className = `message ${type}`
+  //console.log(text)
+
+  const converted = micromark(text)
+  //console.log(converted)
+
+  message.innerHTML = converted
+
+  chatDiv.appendChild(message)
+  chatDiv.scrollTop = chatDiv.scrollHeight
+  return message
+}
+
 //call history function
 loadHistory()
 
@@ -98,20 +113,7 @@ resetBtn.addEventListener("click", async () => {
 })
 
 
-function addMessage(type, text) {
-  const message = document.createElement("div")
-  message.className = `message ${type}`
-  //console.log(text)
 
-  const converted = micromark(text)
-  //console.log(converted)
-
-  message.innerHTML = converted
-
-  chatDiv.appendChild(message)
-  chatDiv.scrollTop = chatDiv.scrollHeight
-  return message
-}
 
 
 

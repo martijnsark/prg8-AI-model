@@ -1,25 +1,35 @@
 import {micromark} from 'https://esm.sh/micromark@3?bundle'
 
-// client app.js
+//client app.js
+
+//get dom elements from the frontend
 const btn = document.querySelector("button")
 const input = document.querySelector("#input")
 const chatDiv = document.querySelector(".chat")
 const scoreDiv = document.querySelector(".score")
 const resetBtn = document.querySelector("#reset")
-let userId = localStorage.getItem("userid");
 
+
+//save user id and score in local storage for load history
+let userId = localStorage.getItem("userid");
 let score = Number(localStorage.getItem("score")) || 0
 scoreDiv.textContent = `Score: ${score}`
 
+
+
+//check if the user has a user id otherwise make one
 if (!userId) {
   userId = crypto.randomUUID();
   localStorage.setItem("userid", userId);
 }
 
 
+//console.log to check frontend
 console.log("starting frontend")
 
-//load history fucntion
+
+
+//load history function
 async function loadHistory() {
   const res = await fetch("/api/getHistory", {
     method: "POST",
@@ -29,6 +39,7 @@ async function loadHistory() {
 
   const history = await res.json()
 
+  //load history for each user, and ai message
   history.forEach((msg) => {
     if (msg.role === "user") {
       addMessage("user", msg.content)
@@ -40,6 +51,9 @@ async function loadHistory() {
   })
 }
 
+
+
+//create message in chat logic + conversion to micromark
 function addMessage(type, text) {
   const message = document.createElement("div")
   message.className = `message ${type}`
@@ -52,20 +66,27 @@ function addMessage(type, text) {
 
   chatDiv.appendChild(message)
   chatDiv.scrollTop = chatDiv.scrollHeight
+  //render converted markdown content into the message element
   return message
 }
+
+
 
 //call history function
 loadHistory()
 
 
+
+//send prompt event 
 btn.addEventListener("click", async (e) => {
   //prevent reload
   e.preventDefault() 
   
+  //remove whitespace from user input
   const prompt = input.value.trim()
   if (!prompt) return
 
+  //add user input in chat
   addMessage("user", prompt)
   input.value = ""
   btn.disabled = true
@@ -73,6 +94,7 @@ btn.addEventListener("click", async (e) => {
 
   try {
     //get data
+    //send userid and prompt to backend
     const data = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -82,13 +104,18 @@ btn.addEventListener("click", async (e) => {
     //save data
     const result = await data.json()
 
+
+   //score is the score from the json, and otherwise the local storage score
    score = result.score ?? score
+   //save score to local storage
    localStorage.setItem("score", score)
+   //display score
    scoreDiv.textContent = `Score: ${score}`
-   addMessage("assistant", `${result.question}\n\n_Tokens used: ${result.tokens}_`)
+   //display AI response with token usage
+   addMessage("ai", `${result.question}\n\n_Tokens used: ${result.tokens}_`)
 
   } catch (error) {
-    addMessage("assistant", "````_something went wrong_````")
+    addMessage("ai", "````_something went wrong_````")
     console.error(error)
   } finally {
     btn.disabled = false
@@ -96,6 +123,8 @@ btn.addEventListener("click", async (e) => {
   }
 })
 
+
+//reset button event empties chat and resets score to 0
 resetBtn.addEventListener("click", async () => {
   await fetch("/api/reset", {
     method: "POST",
@@ -103,10 +132,10 @@ resetBtn.addEventListener("click", async () => {
     body: JSON.stringify({ userId })
   })
 
-  // clear UI
+  //clear UI
   chatDiv.innerHTML = ""
 
-  // reset score
+  //reset score
   score = 0
   localStorage.setItem("score", score)
   scoreDiv.textContent = `Score: ${score}`

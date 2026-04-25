@@ -12,7 +12,7 @@
 
 ### 2. Clone the project
 ```bash
-git clone https://github.com/<jouw-gebruikersnaam>/prg8-AI-model.git
+git clone https://github.com/martijnsark/prg8-AI-model.git
 cd prg8-AI-model
 ```
 
